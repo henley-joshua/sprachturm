@@ -6,7 +6,7 @@ BUILD_DIR  := build/$(BUILD)
 
 RAYLIB_SRC := vendor/raylib/src
 CC         := gcc
-CFLAGS     := -Wall -Wextra -std=c11 -I./include -I./src -I$(RAYLIB_SRC) -D_GLFW_X11
+CFLAGS     := -Wall -Wextra -std=c11 -I./utils -I./include -I./src -I$(RAYLIB_SRC) -D_GLFW_X11
 LDFLAGS    := -lm
 
 
