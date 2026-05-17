@@ -12,7 +12,7 @@ void cameraInit(void) {
 	CAMERA_3D.up         = (Vector3){ 0.0f, 1.0f, 0.0f };
 	CAMERA_3D.fovy       = 45.0f;
 	CAMERA_3D.projection = CAMERA_PERSPECTIVE;
-	//DisableCursor();
+	DisableCursor();
 }
 
 Vector3 getCameraMovement(void) {
