@@ -25,7 +25,7 @@ ifeq ($(OS), Windows_NT)
 endif
 
 CFLAGS     := -Wall -Wextra -std=c11 \
-	      -I./utils -I./include -I./src -I$(RAYLIB_SRC) \
+	      -I./include -I./src -I$(RAYLIB_SRC) \
 	      -D_GLFW_X11 \
 	      $(PLATFORM_FLAGS)
 

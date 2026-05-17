@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "engine/physics/collision.h"
-#include "macros.h"
+#include "engine/rendering/camera.h"
+#include "utils/macros.h"
 #include <stdio.h>
 
 int startGameLoop(void) {
@@ -40,9 +41,9 @@ int startGameLoop(void) {
 
 
 		BeginDrawing();
-			DrawRectangleRec(myRectangle, colors[colorIndex+1]);
-			ClearBackground(MAGENTA);
-			DrawText("This is a window", xCurrPosition, yCurrPosition, 20, colors[colorIndex]);
+			ClearBackground(BLACK);
+			enterFreeCam();
+			DrawFPS(10, 10);
 		EndDrawing();
 	}
 
