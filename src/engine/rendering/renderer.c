@@ -9,3 +9,8 @@ int createWindow(void) {
 	SetTargetFPS(60);
 	return 0;
 }
+
+void checkToggleFullscreen(void) {
+	bool toggleFullscreen = IsKeyPressed(KEY_F1);
+	if (toggleFullscreen) ToggleFullscreen();
+}
