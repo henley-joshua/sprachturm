@@ -2,5 +2,6 @@
 #define CAMERA_H
 
 void enterFreeCam(void);
+void cameraInit(void);
 
 #endif
