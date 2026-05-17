@@ -5,10 +5,39 @@ BUILD      ?= debug
 BUILD_DIR  := build/$(BUILD)
 
 RAYLIB_SRC := vendor/raylib/src
-CC         := gcc
-CFLAGS     := -Wall -Wextra -std=c11 -I./utils -I./include -I./src -I$(RAYLIB_SRC) -D_GLFW_X11
-LDFLAGS    := -lm
+CC_LINUX   := gcc
+CC_WINDOWS := x86_64-w64-mingw32-gcc
 
+
+UNAME      := $(shell uname)
+ifeq ($(UNAME), Linux)
+	CC             := $(CC_LINUX)
+	PLATFORM_FLAGS := -D_GLFW_X11 -DPLATFORM_DESKTOP
+	LDFLAGS        := -lm -lGL -lpthread -ldl -lrt -lX11
+	TARGET         := $(BUILD_DIR)/bin/game
+endif
+
+ifeq ($(OS), Windows_NT)
+	CC             := $(CC_LINUX)
+	PLATFORM_FLAGS := -DPLATFORM_DESKTOP
+	LDFLAGS        := -lm -lopengll32 -lgdi32 -lwinmm
+	TARGET         := $(BUILD_DIR)/bin/game.exe
+endif
+
+CFLAGS     := -Wall -Wextra -std=c11 \
+	      -I./utils -I./include -I./src -I$(RAYLIB_SRC) \
+	      -D_GLFW_X11 \
+	      $(PLATFORM_FLAGS)
+
+ifeq ($(BUILD), debug)
+	CFLAGS += -g -O0 -DDEBUG
+else
+	CFLAGS += -O2 -DNEBUG
+endif
+
+SRC_DIR := src
+SRCS := $(shell find $(SRC_DIR) -name '*.c')
+OBJS := $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 
 RAYLIB_OBJS    := $(BUILD_DIR)/raylib/rcore.o \
                   $(BUILD_DIR)/raylib/rshapes.o \
@@ -18,23 +47,6 @@ RAYLIB_OBJS    := $(BUILD_DIR)/raylib/rcore.o \
                   $(BUILD_DIR)/raylib/raudio.o \
                   $(BUILD_DIR)/raylib/rglfw.o
 RAYLIB_LIB     := $(BUILD_DIR)/libraylib.a
-
-# Platform detection
-UNAME := $(shell uname)
-ifeq ($(UNAME), Darwin)
-    LDFLAGS += -framework OpenGL -framework Cocoa -framework IOKit
-endif
-ifeq ($(UNAME), Linux)
-    LDFLAGS += -lGL -lpthread -ldl -lrt -lX11
-endif
-
-# Debug vs Release
-BUILD ?= debug
-ifeq ($(BUILD), debug)
-    CFLAGS += -g -O0 -DDEBUG
-else
-    CFLAGS += -O2 -DNDEBUG
-endif
 
 # ============================================================
 # Source Discovery
@@ -67,13 +79,23 @@ $(RAYLIB_LIB): $(RAYLIB_OBJS)
 clean:
 	rm -rf build/
 
+clean-releases:
+	rm -rf build/release/
+
 run: all
 	./$(TARGET)
 
 debug: BUILD=debug
 debug: all
 
-release: BUILD=release
-release: all
+release-linux:
+	./scripts/release.sh linux
 
-.PHONY: all clean run debug release
+release-windows:
+	./scripts/release.sh windows
+
+release:
+	./scripts/release.sh all
+
+.PHONY: all clean clean-releases run debug \
+	release-linux release-windows release
