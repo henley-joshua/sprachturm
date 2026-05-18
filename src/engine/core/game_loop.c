@@ -22,7 +22,6 @@ int startGameLoop(void) {
 			ClearBackground(BLACK);
 			DrawFPS(10, 10);
 
-			TraceLog(LOG_INFO, "RENDER target: %f %f %f", player.camera.target.x, player.camera.target.y, player.camera.target.z);
 			BeginMode3D(player.camera);
 				updatePlayerMovement(&player);
 				drawEnvironment();
