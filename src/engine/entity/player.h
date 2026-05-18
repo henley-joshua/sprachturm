@@ -2,12 +2,11 @@
 #define PLAYER_H
 
 #include "raylib.h"
+#include "engine/entity/entity.h"
 
 typedef struct {
 	Camera3D camera;
-	Vector3 position;
-	Vector3 size;
-	Color color;
+	Entity base;
 } Player;
 
 Vector3 getCameraMovement(void);

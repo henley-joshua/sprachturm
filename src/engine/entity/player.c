@@ -2,6 +2,7 @@
 #include "utils/movement.h"
 #include "engine/rendering/camera.h"
 #include "engine/entity/player.h"
+#include "engine/physics/collision.h"
 
 Vector3 PLAYER_INIT_POSITION = { 0.0f, 10.0f, 10.0f };
 Vector3 PLAYER_INIT_TARGET = { 0.0f, 0.0f, 0.0f };
@@ -30,9 +31,9 @@ void playerInit(Player *player) {
 
 	playerCamera = playerCameraInit(PLAYER_INIT_POSITION, PLAYER_INIT_TARGET, PLAYER_INIT_UP);
 	player->camera = playerCamera;
-	player->position = PLAYER_INIT_POSITION;
-	player->size = PLAYER_INIT_SIZE;
-	player->color = PLAYER_INIT_COLOR;
+	player->base.position = PLAYER_INIT_POSITION;
+	player->base.size = PLAYER_INIT_SIZE;
+	player->base.color = PLAYER_INIT_COLOR;
 }
 
 void movePlayerCamera(Player *player, Vector3 distance) {
@@ -57,15 +58,17 @@ void movePlayerCamera(Player *player, Vector3 distance) {
 }
 
 void movePlayerBody(Player *player, Vector3 position) {
-	player->position.x = position.x;
-	player->position.y = position.y;
-	player->position.z = position.z;
+	player->base.position.x = position.x;
+	player->base.position.y = position.y;
+	player->base.position.z = position.z;
 }
 
 void updatePlayerMovement(Player *player) {
 	Vector3 distance;
 	distance = getCameraMovement();
 
+	float groundCollisionDistance = enforcePlayerGroundCollision(player->base);
+	distance.z += groundCollisionDistance;
 	movePlayerCamera(player, distance);
 	movePlayerBody(player, player->camera.position);
 }
@@ -75,5 +78,5 @@ void rotatePlayerBody(Player *player, Vector3 distance) {
 }
 
 void drawPlayer(Player *player) {
-	DrawCubeV(player->position, player->size, player->color);
+	DrawCubeV(player->base.position, player->base.size, player->base.color);
 }
