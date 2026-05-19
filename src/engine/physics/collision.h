@@ -10,9 +10,8 @@ typedef struct {
 BorderCollision checkBorderCollision(Rectangle rec);
 float getGroundHeight(Vector3 position);
 bool checkGroundCollision(Entity *entity);
-void setEntityHeight(Entity *entity, float newHeight);
 void enforceEntityGroundCollision(Entity *entity);
 float getDistanceBelowGround(Entity *entity);
-float enforcePlayerGroundCollision(Entity player);
+float enforcePlayerGroundCollision(Entity *player);
 
 #endif
