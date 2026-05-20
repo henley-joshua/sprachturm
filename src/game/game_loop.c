@@ -4,7 +4,6 @@
 #include "engine/rendering/camera.h"
 #include "engine/entity/player.h"
 #include "engine/scene/scene.h"
-#include <stdio.h>
 
 int startGameLoop(void) {
 
