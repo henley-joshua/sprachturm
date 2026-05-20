@@ -21,12 +21,16 @@ float getGroundHeight(Vector3 position) {
 
 bool checkGroundCollision(Entity *entity) {
 	float groundHeight = getGroundHeight(entity->position);
-	if (entity->position.y <= groundHeight) return true;
+	float footPosition = entity->position.y - entity->model.size.y;
+	if (footPosition <= groundHeight) {
+		return true;
+	}
 	return false;
 }
 
 float getDistanceBelowGround(Entity *entity) {
-	return (getGroundHeight(entity->position) - entity->position.y);
+	float distanceBelowGround = getGroundHeight(entity->position) - (entity->position.y - entity->model.size.y);
+	return distanceBelowGround;
 }
 
 void enforceEntityGroundCollision(Entity *entity) {

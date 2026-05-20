@@ -43,7 +43,11 @@ Vector3 getPlayerMovementVector(Movement movement, Player *player) {
 	return movementVector;
 }
 
+// This will have to be updated when we add "platforming" because then the ground height
+// will not be the same as the height of the object the player is on. Unless the calculation
+// for ground height accounts for that, but that is a little misleading for the function name.
 bool checkIfPlayerCanJump(Player *player) {
-	if (player->base.position.y == getGroundHeight(player->base.position)) return true;
+	float footLevel = player->base.position.y - player->base.model.size.y;
+	if (footLevel == getGroundHeight(player->base.position)) return true;
 	return false;
 }

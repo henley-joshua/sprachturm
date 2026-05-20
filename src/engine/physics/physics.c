@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "engine/entity/entity.h"
 
-float GRAVITY = 0.05f;
+float GRAVITY = 0.1f;
 float FRICTION = 0.20f;
 
 void setEntityHeight(Entity *entity, float newHeight) {
@@ -17,8 +17,9 @@ void setEntityVerticalAcceleration(Entity *entity, float newAcceleration) {
 }
 
 void applyEntityGravity(Entity *entity) {
-	if (entity->position.y > 0) {
-		entity->acceleration.z -= GRAVITY;
+	float entityFootLevel = entity->position.y - entity->model.size.y;
+	if (entityFootLevel > 0) {
+		entity->acceleration.z = -GRAVITY;
 	}
 }
 

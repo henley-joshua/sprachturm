@@ -4,9 +4,8 @@
 #include "engine/entity/player.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
-#include <stdio.h>
 
-Vector3 PLAYER_INIT_POSITION = { 0.0f, 10.0f, 10.0f };
+Vector3 PLAYER_INIT_POSITION = { 0.0f, 20.0f, 20.0f };
 Vector3 PLAYER_INIT_TARGET = { 0.0f, 0.0f, 0.0f };
 Vector3 PLAYER_INIT_UP = { 0.0f, 1.0f, 0.0f };
 Vector3 PLAYER_INIT_SIZE = { 2.0f, 3.0f, 1.5f };
@@ -51,8 +50,8 @@ void playerInit(Player *player) {
 	player->base.acceleration = (Vector3) { 0.0f, 0.0f, 0.0f };
 	player->base.velocity = (Vector3) { 0.0f, 0.0f, 0.0f };
 	player->base.position = PLAYER_INIT_POSITION;
-	player->base.size = PLAYER_INIT_SIZE;
-	player->base.color = PLAYER_INIT_COLOR;
+	player->base.model.size = PLAYER_INIT_SIZE;
+	player->base.model.color = PLAYER_INIT_COLOR;
 }
 
 void movePlayer(Player *player, Vector3 distance) {
@@ -106,6 +105,14 @@ void rotatePlayerBody(Player *player, Vector3 distance) {
 	int x = 0;
 }
 
+// Changes the y position of a given Vector3 by half of the player size
+Vector3 getAdjustedPlayerPosition(Player *player, Vector3 position) {
+	float playerHeight = player->base.model.size.y / 2.0f;
+	position.y -= playerHeight;
+	return position;
+}
+
 void drawPlayer(Player *player) {
-	DrawCubeV(player->base.position, player->base.size, player->base.color);
+	Vector3 adjustedPosition = getAdjustedPlayerPosition(player, player->base.position);
+	DrawCubeV(adjustedPosition, player->base.model.size, player->base.model.color);
 }
