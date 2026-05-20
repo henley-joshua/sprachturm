@@ -18,12 +18,12 @@ int startGameLoop(void) {
 		checkToggleFullscreen();
 
 		// Begin main game state
+		updatePlayerMovement(&player);
 		BeginDrawing();
 			ClearBackground(BLACK);
 			DrawFPS(10, 10);
 
 			BeginMode3D(player.camera);
-				updatePlayerMovement(&player);
 				drawEnvironment();
 				drawPlayer(&player);
 			EndMode3D();

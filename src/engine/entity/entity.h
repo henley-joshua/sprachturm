@@ -2,12 +2,15 @@
 #define ENTITY_H
 
 #include "raylib.h"
+#include "engine/rendering/model.h"
 
 // Probably will add a velocity vector here
 typedef struct {
+	Vector3 acceleration;
+	Vector3 velocity;
 	Vector3 position;
-	Vector3 size;
-	Color color;
+	bool canJump;
+	EntityModel model;
 } Entity;
 
 #endif
