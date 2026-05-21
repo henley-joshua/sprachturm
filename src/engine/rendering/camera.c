@@ -13,6 +13,12 @@ Camera3D playerCameraInit(Vector3 position, Vector3 target, Vector3 up) {
 	return playerCamera3D;
 }
 
+void setCamera3DPosition(Camera3D *camera, Vector3 position) {
+	camera->position.x = position.x;
+	camera->position.y = position.y;
+	camera->position.z = position.z;
+}
+
 void moveCamera3D(Camera3D *camera, Vector3 cameraMovement, Vector3 cameraRotate) {
 	UpdateCameraPro(camera, cameraMovement, cameraRotate, 0);
 }

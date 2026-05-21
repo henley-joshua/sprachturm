@@ -1,12 +1,55 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include "engine/entity/entity.h"
+#include "engine/physics/collision.h"
 
-void setEntityHeight(Entity *entity, float newHeight);
-void setEntityVerticalVelocity(Entity *entity, float newVelocity);
-void setEntityVerticalAcceleration(Entity *entity, float newAcceleration);
-void applyEntityGravity(Entity *entity);
-void applyEntityFriction(Entity *entity);
+typedef enum {
+	PHYSICS_2D,
+	PHYSICS_3D
+} PhysicsDimensions;
+
+typedef enum {
+	BODY_DYNAMIC,     // full physics - affected by forces and gravity
+	BODY_KINEMATIC,   // moved by code only, not forces
+	BODY_STATIC       // never moves
+} BodyType;
+
+typedef struct {
+	PhysicsDimensions dimensions;
+	Vector3 gravity;
+	float airDrag;
+	float groundFriction;
+	bool enableGravity;
+	bool enableFriction;
+	bool enableBuoyancy;
+	bool enableWind;
+	int substeps;
+	float fixedTimestep;
+} PhysicsConfig;
+
+typedef struct {
+	float maxHorizontalVelocity;
+	float maxVelocityUp;
+	float maxVelocityDown;
+} VelocityLimits;
+
+typedef struct {
+	Vector3 position;
+	Vector3 velocity;
+	Vector3 acceleration;
+	BodyType bodyType;
+	float mass;
+	float friction;
+	float bounciness;
+	float gravityScale;
+	ColliderType colliderType;
+	float colliderRadius;
+	Vector3 colliderExtents;
+	bool isGrouded;
+	bool isActive;
+	bool overrideDrag;
+	bool overrideFriction;
+	VelocityLimits velocityLimits;
+} PhysicsBody;
 
 #endif

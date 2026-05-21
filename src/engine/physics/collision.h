@@ -2,16 +2,14 @@
 #define COLLISION_H
 
 #include "raylib.h"
-#include "engine/entity/entity.h"
 
-typedef struct {
-	bool left, right, top, bottom;
-} BorderCollision;
-BorderCollision checkBorderCollision(Rectangle rec);
-float getGroundHeight(Vector3 position);
-bool checkGroundCollision(Entity *entity);
-void enforceEntityGroundCollision(Entity *entity);
-float getDistanceBelowGround(Entity *entity);
-float enforcePlayerGroundCollision(Entity *player);
+typedef enum {
+	COLLIDER_NONE,
+	COLLIDER_AABB,
+	COLLIDER_SPHERE,
+	COLLIDER_CAPSULE,
+	COLLIDER_HEIGHTMAP,
+	COLLIDER_RAY
+} ColliderType;
 
 #endif
