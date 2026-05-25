@@ -2,7 +2,7 @@
 #include "engine/physics/collision.h"
 #include "engine/rendering/renderer.h"
 #include "engine/rendering/camera.h"
-#include "engine/entity/player.h"
+#include "game/player.h"
 #include "engine/scene/scene.h"
 
 int startGameLoop(void) {
