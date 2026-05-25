@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include "utils/movement.h"
 #include "engine/rendering/camera.h"
-#include "engine/entity/player.h"
+#include "game/player.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
 
