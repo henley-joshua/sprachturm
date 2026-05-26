@@ -2,7 +2,6 @@
 #define MOVEMENT_H
 
 #include "raylib.h"
-#include "game/player.h"
 
 typedef struct {
 	bool forward;
@@ -14,7 +13,7 @@ typedef struct {
 } Movement;
 
 Vector3 getMovementVector(Movement movement);
-Vector3 getPlayerMovementVector(Movement movement, Player *player);
-bool checkIfPlayerCanJump(Player *player);
+Vector3 getPlayerMovementVector(Movement movement, Vector3 forward, Vector3 right);
+Movement getPlayerInput();
 
 #endif
