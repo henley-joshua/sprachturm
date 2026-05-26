@@ -1,6 +1,6 @@
+#include <math.h>
 #include "raylib.h"
 #include "utils/movement.h"
-#include "engine/entity/player.h"
 #include "engine/physics/collision.h"
 
 Vector3 getMovementVector(Movement movement) {
@@ -23,31 +23,46 @@ Vector3 getMovementVector(Movement movement) {
 	return movementVector;
 }
 
-Vector3 getPlayerMovementVector(Movement movement, Player *player) {
-	Vector3 movementVector;
-	int xVelocity = 0;
-	int yVelocity = 0;
-	int zAcceleration = 0;
+// This should be generalized. Also need variable input keys to make it customizeable in menu
+Movement getPlayerInput() {
+	Movement movementsMap;
 
-	if (movement.forward) xVelocity = 1.0f;
-	if (movement.backward) xVelocity = -1.0f;
-	if (movement.left) yVelocity = -1.0f;
-	if (movement.right) yVelocity = 1.0f;
-	if (movement.up && player->base.canJump) zAcceleration += 1.0f;
-	if (movement.down) zAcceleration -= 0.0f;
-
-	movementVector.x = xVelocity;
-	movementVector.y = yVelocity;
-	movementVector.z = zAcceleration;
-
-	return movementVector;
+	movementsMap.left = IsKeyDown(KEY_A);
+	movementsMap.right = IsKeyDown(KEY_D);
+	movementsMap.forward = IsKeyDown(KEY_W);
+	movementsMap.backward = IsKeyDown(KEY_S);
+	movementsMap.up = IsKeyPressed(KEY_SPACE);
+	movementsMap.down = IsKeyDown(KEY_LEFT_CONTROL);
+	return movementsMap;
 }
 
-// This will have to be updated when we add "platforming" because then the ground height
-// will not be the same as the height of the object the player is on. Unless the calculation
-// for ground height accounts for that, but that is a little misleading for the function name.
-bool checkIfPlayerCanJump(Player *player) {
-	float footLevel = player->base.position.y - player->base.model.size.y;
-	if (footLevel == getGroundHeight(player->base.position)) return true;
-	return false;
+// TODO: Change this to generic movement vector and take in button mappings
+// or button mappings can be handled in input and this just keeps the bool checks
+Vector3 getPlayerMovementVector(Movement movement, Vector3 forward, Vector3 right) {
+	Vector3 movementVector = { 0 };
+
+	if (movement.forward) {
+		movementVector.x += forward.x;
+		movementVector.z += forward.z;
+	}
+	if (movement.backward) {
+		movementVector.x -= forward.x;
+		movementVector.z -= forward.z;
+	}
+	if (movement.left) {
+		movementVector.x -= right.x;
+		movementVector.z -= right.z;
+	}
+	if (movement.right) {
+		movementVector.x += right.x;
+		movementVector.z += right.z;
+	}
+
+	float moveLength = sqrtf(movementVector.x * movementVector.x + movementVector.z * movementVector.z);
+	if (moveLength > 0) {
+		movementVector.x /= moveLength;
+		movementVector.z /= moveLength;
+	}
+
+	return movementVector;
 }
