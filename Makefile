@@ -7,7 +7,7 @@ BUILD_DIR  := build/$(BUILD)
 RAYLIB_SRC := vendor/raylib/src
 CC_LINUX   := gcc
 CC_WINDOWS := x86_64-w64-mingw32-gcc
-
+CC_MAC	   := clang
 
 UNAME      := $(shell uname)
 ifeq ($(UNAME), Linux)
@@ -23,6 +23,17 @@ ifeq ($(OS), Windows_NT)
 	LDFLAGS        := -lm -lopengll32 -lgdi32 -lwinmm
 	TARGET         := $(BUILD_DIR)/bin/game.exe
 endif
+
+ifeq ($(UNAME), Darwin)
+	CC			   := $(CC_MAC)
+	PLATFORM_FLAGS := -DPLATFORM_DESKTOP -D_GLFW_COCOA
+	EXTRA_FLAGS	   := -x objective-c
+	LDFLAGS		   := -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
+	TARGET 		   := $(BUILD_DIR)/bin/game
+else 
+	EXTRA_FLAGS :=
+endif
+
 
 CFLAGS     := -Wall -Wextra -std=c11 \
 	      -I./game -I./include -I./src -I$(RAYLIB_SRC) \
@@ -67,7 +78,7 @@ $(TARGET): $(OBJS) $(RAYLIB_LIB)
 
 $(BUILD_DIR)/raylib/%.o: $(RAYLIB_SRC)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) -std=c11 -I$(RAYLIB_SRC) -I$(RAYLIB_SRC)/external/glfw/include -D_GLFW_X11 -DPLATFORM_DESKTOP -w -c $< -o $@
+	$(CC) -std=c11 $(EXTRA_FLAGS) -I$(RAYLIB_SRC) -I$(RAYLIB_SRC)/external/glfw/include $(PLATFORM_FLAGS) -w -c $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
