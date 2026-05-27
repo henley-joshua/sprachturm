@@ -123,8 +123,6 @@ static void physicsDetectCollisions(void) {
 			if (bodyA->bodyType == BODY_STATIC && bodyB->bodyType == BODY_STATIC) continue;
 			if (!collisionBroadPhase(bodyA, bodyB)) continue;
 
-			TraceLog(LOG_INFO, "Collision moving to narrow phase");
-
 			CollisionResult result = collisionNarrowPhase(bodyA, bodyB);
 
 			if (result.hit) {
@@ -194,9 +192,6 @@ static void physicsResolveCollisionVelocity(PhysicsBody *bodyA, PhysicsBody *bod
 
 // Simpler collision interaction between a dynamic body and static body, only applies to the dynamic body
 static void physicsResolveStatic(PhysicsBody *body, CollisionResult result) {
-	TraceLog(LOG_INFO, "BEFORE resolve pos: %f %f %f vel: %f %f %f",
-		body->position.x, body->position.y, body->position.z,
-		body->velocity.x, body->velocity.y, body->velocity.z);
 	body->position.x += result.normal.x * result.depth;
 	body->position.y += result.normal.y * result.depth;
 	body->position.z += result.normal.z * result.depth;
@@ -220,9 +215,6 @@ static void physicsResolveStatic(PhysicsBody *body, CollisionResult result) {
 		body->acceleration.y = 0;
 	}
 
-	TraceLog(LOG_INFO, "AFTER resolve pos: %f %f %f vel: %f %f %f",
-		body->position.x, body->position.y, body->position.z,
-		body->velocity.x, body->velocity.y, body->velocity.z);
 }
 
 // Applies the result of a collision to the two bodies involved

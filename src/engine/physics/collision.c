@@ -67,12 +67,6 @@ static CollisionResult collisionAabbAabb(PhysicsBody *bodyA, PhysicsBody *bodyB)
 		(aMinZ > bMinZ ? aMinZ : bMinZ) + overlapZ * 0.5f
 	};
 
-	TraceLog(LOG_INFO, "overlaps: x=%f y=%f z=%f", overlapX, overlapY, overlapZ);
-	TraceLog(LOG_INFO, "bodyA pos: %f %f %f", bodyA->position.x, bodyA->position.y, bodyA->position.z);
-	TraceLog(LOG_INFO, "bodyB pos: %f %f %f", bodyB->position.x, bodyB->position.y, bodyB->position.z);
-
-	TraceLog(LOG_INFO, "normal: %f %f %f  depth: %f", result.normal.x, result.normal.y, result.normal.z, result.depth);
-
 	return result;
 }
 
@@ -151,14 +145,11 @@ bool collisionBroadPhase(PhysicsBody *bodyA, PhysicsBody *bodyB) {
 // collisionBroadPhase. Gets the result of the collision between the two bodies.
 CollisionResult collisionNarrowPhase(PhysicsBody *bodyA, PhysicsBody *bodyB) {
 	// Get collision function based on both body collision types
-	TraceLog(LOG_INFO, "Collision type a: %d", bodyA->colliderType);
-	TraceLog(LOG_INFO, "Collision type b: %d", bodyB->colliderType);
 	CollisionFunc function = collisionDispatch[bodyA->colliderType][bodyB->colliderType];
 
 	if (function == NULL) {
 		// for non-supported collision, return no collision (for now)
 		return (CollisionResult){ .hit = false };
 	}
-	TraceLog(LOG_INFO, "Collision function found");
 	return function(bodyA, bodyB);
 }
