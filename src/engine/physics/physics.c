@@ -201,7 +201,7 @@ static void physicsResolveStatic(PhysicsBody *body, CollisionResult result) {
 		body->velocity.y * result.normal.y +
 		body->velocity.z * result.normal.z;
 
-	if (velocityAlongNormal < 0) {
+	if (velocityAlongNormal <= 0) {
 		float impulse = -(1.0f + body->bounciness) * velocityAlongNormal;
 
 		body->velocity.x += impulse * result.normal.x;
@@ -209,7 +209,12 @@ static void physicsResolveStatic(PhysicsBody *body, CollisionResult result) {
 		body->velocity.z += impulse * result.normal.z;
 	}
 
-	if (result.normal.y > 0.7f) body->isGrounded = true;
+	if (result.normal.y > 0.7f) {
+		body->isGrounded = true;
+		body->velocity.y = 0;
+		body->acceleration.y = 0;
+	}
+
 }
 
 // Applies the result of a collision to the two bodies involved

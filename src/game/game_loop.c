@@ -5,12 +5,12 @@
 #include "engine/rendering/camera.h"
 #include "game/player.h"
 #include "game/heightmap.h"
-#include "engine/scene/scene.h"
+#include "game/environment.h"
 
 
 PhysicsConfig physicsConfig = {
 	.dimensions = PHYSICS_3D,
-	.gravity = { 0.0f, -1.5f, 0.0f },
+	.gravity = { 0.0f, -3.5f, 0.0f },
 	.enableGravity = true,
 	.airDrag = 0.01,
 	.groundFriction = 0.5f,
@@ -27,6 +27,7 @@ int startGameLoop(void) {
 	collisionInit();
 	playerInit(&player);
 	physicsInit(physicsConfig);
+	staticCubesInit();
 
 	double accumulator = 0.0;
 	double previousTime = GetTime();
@@ -63,6 +64,8 @@ int startGameLoop(void) {
 
 	}
 
+	staticCubesUnload();
 	CloseWindow();
+
 	return 0;
 }

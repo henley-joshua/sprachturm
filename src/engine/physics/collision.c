@@ -16,9 +16,63 @@ Vector3 heightmapGetNormal(Vector3 position) {
 	return (Vector3) { 0.0f, 1.0f, 0.0f };
 }
 
+static CollisionResult collisionAabbAabb(PhysicsBody *bodyA, PhysicsBody *bodyB) {
+	CollisionResult result;
+	result.hit = false;
+
+	float aMaxX = bodyA->position.x + bodyA->colliderExtents.x;
+	float aMaxY = bodyA->position.y + bodyA->colliderExtents.y;
+	float aMaxZ = bodyA->position.z + bodyA->colliderExtents.z;
+	float aMinX = bodyA->position.x - bodyA->colliderExtents.x;
+	float aMinY = bodyA->position.y - bodyA->colliderExtents.y;
+	float aMinZ = bodyA->position.z - bodyA->colliderExtents.z;
+
+	float bMaxX = bodyB->position.x + bodyB->colliderExtents.x;
+	float bMaxY = bodyB->position.y + bodyB->colliderExtents.y;
+	float bMaxZ = bodyB->position.z + bodyB->colliderExtents.z;
+	float bMinX = bodyB->position.x - bodyB->colliderExtents.x;
+	float bMinY = bodyB->position.y - bodyB->colliderExtents.y;
+	float bMinZ = bodyB->position.z - bodyB->colliderExtents.z;
+
+	if (aMaxX <= bMinX || aMinX >= bMaxX) return result;
+	if (aMaxY <= bMinY || aMinY >= bMaxY) return result;
+	if (aMaxZ <= bMinZ || aMinZ >= bMaxZ) return result;
+
+	result.hit = true;
+	float overlapX = (aMaxX < bMaxX ? aMaxX : bMaxX) - (aMinX > bMinX ? aMinX : bMinX);
+	float overlapY = (aMaxY < bMaxY ? aMaxY : bMaxY) - (aMinY > bMinY ? aMinY : bMinY);
+	float overlapZ = (aMaxZ < bMaxZ ? aMaxZ : bMaxZ) - (aMinZ > bMinZ ? aMinZ : bMinZ);
+	
+	// Use the axis with the smallest collision and apply result along that axis
+	if (overlapY <= overlapX && overlapY <= overlapZ) {
+		result.depth = overlapY;
+		result.normal.x = 0;
+		result.normal.z = 0;
+		result.normal.y = (bodyA->position.y < bodyB->position.y) ? -1.0f : 1.0f;
+	} else if (overlapX <= overlapY && overlapX <= overlapZ) {
+		result.depth    = overlapX;
+		result.normal.y = 0;
+		result.normal.z = 0;
+		result.normal.x = (bodyA->position.x < bodyB->position.x) ? -1.0f : 1.0f;
+	} else {
+		result.depth    = overlapZ;
+		result.normal.x = 0;
+		result.normal.y = 0;
+		result.normal.z = (bodyA->position.z < bodyB->position.z) ? -1.0f : 1.0f;
+	}
+
+	result.point = (Vector3){
+		(aMinX > bMinX ? aMinX : bMinX) + overlapX * 0.5f,
+		(aMinY > bMinY ? aMinY : bMinY) + overlapY * 0.5f,
+		(aMinZ > bMinZ ? aMinZ : bMinZ) + overlapZ * 0.5f
+	};
+
+	return result;
+}
+
 // Initializes 2D function pointer array to map body collision types to correct specific functions
 void collisionInit(void) {
-	//collisionDispatch[COLLIDER_AABB][COLLIDER_AABB] = collisionAabbAabb;
+	collisionDispatch[COLLIDER_AABB][COLLIDER_AABB] = collisionAabbAabb;
 	//collisionDispatch[COLLIDER_SPHERE][COLLIDER_SPHERE] = collisionSphereSphere;
 	//collisionDispatch[COLLIDER_AABB][COLLIDER_SPHERE] = collisionAabbSphere;
 	//collisionDispatch[COLLIDER_SPHERE][COLLIDER_AABB] = collisionSphereAabb;
