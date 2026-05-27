@@ -8,7 +8,7 @@
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
 
-float JUMP_FORCE = 10.0;
+float JUMP_FORCE = 20.0;
 float PLAYER_MASS = 20000.0;
 float PLAYER_INIT_SENSITIVITY = 0.003;
 float PLAYER_INIT_SPEED = 10.0;
@@ -67,7 +67,7 @@ void playerInit(Player *player) {
 	VelocityLimits playerVelocityLimits = {
 		.maxHorizontalVelocity = 50.0f,
 		.maxVelocityUp = 20.0f,
-		.maxVelocityDown = 5.0f
+		.maxVelocityDown = 100.0f
 	};
 
 	PhysicsBody playerPhysics = {
@@ -78,8 +78,8 @@ void playerInit(Player *player) {
 		.mass = PLAYER_MASS,
 		.bounciness = 0.0f,
 		.gravityScale = 10.0f,
-		.colliderType = COLLIDER_CAPSULE,
-		.colliderRadius = 0.5f,
+		.colliderType = COLLIDER_AABB,
+		.colliderExtents = { 0.5f, 1.0f, 0.5f },
 		.isActive = true,
 		.velocityLimits = playerVelocityLimits
 	};
