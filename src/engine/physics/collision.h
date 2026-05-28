@@ -2,16 +2,13 @@
 #define COLLISION_H
 
 #include "raylib.h"
-#include "engine/entity/entity.h"
+#include "engine/physics/physics_types.h"
 
-typedef struct {
-	bool left, right, top, bottom;
-} BorderCollision;
-BorderCollision checkBorderCollision(Rectangle rec);
-float getGroundHeight(Vector3 position);
-bool checkGroundCollision(Entity *entity);
-void enforceEntityGroundCollision(Entity *entity);
-float getDistanceBelowGround(Entity *entity);
-float enforcePlayerGroundCollision(Entity *player);
+float heightmapGetHeight(Vector3 position);
+Vector3 heightmapGetNormal(Vector3 position);
+void collisionInit(void);
+CollisionResult collisionHeightmapCheck(PhysicsBody *body);
+bool collisionBroadPhase(PhysicsBody *bodyA, PhysicsBody *bodyB);
+CollisionResult collisionNarrowPhase(PhysicsBody *bodyA, PhysicsBody *bodyB);
 
 #endif

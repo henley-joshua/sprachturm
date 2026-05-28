@@ -7,16 +7,19 @@
 typedef struct {
 	Camera3D camera;
 	Entity base;
+	float height;
+	float speed;
+	float sensitivity;
+	float yaw;
+	float pitch;
 } Player;
 
 Vector3 getFreeCamMovement(void);
-Vector3 getPlayerMovement(Player *player);
 void playerInit(Player *player);
-void movePlayer(Player *player, Vector3 distance);
-void updatePlayerAcceleration(Player *player);
-void updatePlayerVelocity(Player *player);
-void updatePlayerMovement(Player *player);
+void playerUpdate(Player *player, float deltaTime);
 void rotatePlayerBody(Player *player, Vector3 distance);
 void drawPlayer(Player *player);
+void playerSyncCamera(Player *player);
+
 
 #endif
