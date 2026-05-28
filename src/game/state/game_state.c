@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "game_state.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
 #include "engine/rendering/renderer.h"
@@ -6,7 +7,6 @@
 #include "game/player.h"
 #include "game/heightmap.h"
 #include "game/environment.h"
-
 
 PhysicsConfig physicsConfig = {
 	.dimensions = PHYSICS_3D,
@@ -19,8 +19,10 @@ PhysicsConfig physicsConfig = {
 	.fixedTimestep = 1.0f / 60.0f
 };
 
-int startGameLoop(void) {
+GameState gameLoop(void) {
+	GameState state;
 
+	
 	Player player;
 
 	float timer = 0.0f;
@@ -59,13 +61,58 @@ int startGameLoop(void) {
 		EndDrawing();
 		// End main game state
 
-
-
-
 	}
 
 	staticCubesUnload();
 	CloseWindow();
+	return Game_Loop;
+}
 
-	return 0;
+
+
+
+GameState gameMenu(void) {
+	GameState state;
+	bool isButton = false;
+	Rectangle button = {190, 250, 300, 100};
+	while(!WindowShouldClose() && !isButton) {
+		BeginDrawing();
+			ClearBackground(BLACK);
+			DrawRectangle(button.x, button.y, button.width, button.height, WHITE);
+			DrawText("Press Start", 200, 300, 40, GOLD);
+		EndDrawing();
+		Vector2 mouse = GetMousePosition();
+		if(CheckCollisionPointRec(GetMousePosition(), button) && 
+		   IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+			isButton = true;
+		}
+	}
+	return Game_Loop;
+} 
+
+GameState gameStart(void) {
+	GameState state;
+	float duration = 5.0f;
+	float elapsed = 0.0f;
+	float load = 0.0f;
+
+	while(!WindowShouldClose() && elapsed < duration) {
+		float dt = GetFrameTime();
+		elapsed += dt;
+		if(load < 240) {
+			load += 1;
+		}
+		BeginDrawing();
+			ClearBackground(GOLD);
+			DrawText("Josh Stinks", 200, 200, 40, WHITE);
+			DrawRectangle(200, 250, load, 30, WHITE);
+		EndDrawing();
+	}
+	return Game_Menu;
+}
+
+GameState gamePause(void) {
+	GameState state;
+
+	return state;
 }
