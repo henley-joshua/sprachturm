@@ -22,8 +22,6 @@ PhysicsConfig physicsConfig = {
 
 GameState gameLoop(void) {
 	GameState state;
-
-	
 	Player player;
 
 	float timer = 0.0f;
@@ -31,6 +29,7 @@ GameState gameLoop(void) {
 	playerInit(&player);
 	physicsInit(physicsConfig);
 	staticCubesInit();
+	dynamicCubesInit();
 
 	double accumulator = 0.0;
 	double previousTime = GetTime();
@@ -46,6 +45,7 @@ GameState gameLoop(void) {
 
 		// Begin main game state
 		//inputUpdate();   // To be added
+		updateEnvironment();
 		playerUpdate(&player, deltaTime);
 		physicsUpdate(deltaTime);
 		playerSyncCamera(&player);
@@ -65,6 +65,7 @@ GameState gameLoop(void) {
 	}
 
 	staticCubesUnload();
+	dynamicCubesUnload();
 	CloseWindow();
 	return Game_Loop;
 }
@@ -125,7 +126,7 @@ GameState gameStart(void) {
 		}
 		BeginDrawing();
 			ClearBackground(GOLD);
-			DrawText("Josh Stinks", 200, 200, 40, WHITE);
+			DrawText("Ronnie Stinks", 200, 200, 40, WHITE);
 			DrawRectangle(200, 250, load, 30, WHITE);
 		EndDrawing();
 	}

@@ -125,6 +125,7 @@ Vector3 getPlayerMovement(Movement playerInput, Player *player) {
 	Vector3 forward = playerGetForward(player);
 	Vector3 right = playerGetRight(player);
 
+	//physicsIntegrate(&player->base.body, deltaTime);
 	return getPlayerMovementVector(playerInput, forward, right);
 }
 
@@ -135,7 +136,6 @@ void playerUpdate(Player *player, float deltaTime) {
 	player->base.body.velocity.x = playerMovement.x * player->speed;
 	player->base.body.velocity.z = playerMovement.z * player->speed;
 	if (playerInput.up && player->base.body.isGrounded) physicsApplyImpulse(&player->base.body, (Vector3){ 0, JUMP_FORCE, 0 });
-	//physicsIntegrate(&player->base.body, deltaTime);
 }
 
 void rotatePlayerBody(Player *player, Vector3 distance) {
@@ -143,6 +143,9 @@ void rotatePlayerBody(Player *player, Vector3 distance) {
 }
 
 void drawPlayer(Player *player) {
-	DrawCubeV(player->base.body.position, player->base.model.size, player->base.model.color);
+	Vector3 initPosLower = { player->base.body.position.x, player->base.body.position.y - player->height, player->base.body.position.z };
+	Vector3 initPosUpper = { player->base.body.position.x, player->base.body.position.y + player->height, player->base.body.position.z };
+	DrawCapsule(initPosLower, initPosUpper, player->base.body.colliderExtents.x, 10, 10, player->base.model.color);
+	//DrawCubeV(player->base.body.position, player->base.model.size, player->base.model.color);
 }
 
