@@ -28,6 +28,7 @@ GameState gameLoop(void) {
 	playerInit(&player);
 	physicsInit(physicsConfig);
 	staticCubesInit();
+	dynamicCubesInit();
 
 	double accumulator = 0.0;
 	double previousTime = GetTime();
@@ -43,6 +44,7 @@ GameState gameLoop(void) {
 
 		// Begin main game state
 		//inputUpdate();   // To be added
+		updateEnvironment();
 		playerUpdate(&player, deltaTime);
 		physicsUpdate(deltaTime);
 		playerSyncCamera(&player);
@@ -62,6 +64,7 @@ GameState gameLoop(void) {
 	}
 
 	staticCubesUnload();
+	dynamicCubesUnload();
 	CloseWindow();
 	return Game_Loop;
 }
