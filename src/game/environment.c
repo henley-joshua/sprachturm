@@ -56,6 +56,7 @@ static void staticCubesDraw(void) {
 
 void drawEnvironment(void) {
 	DrawGrid(100, 10.0f);
+	DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f}, (Vector2){1000.0f, 1000.0f}, GRAY);
 	staticCubesDraw();
 }
 

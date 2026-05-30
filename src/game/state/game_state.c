@@ -21,8 +21,6 @@ PhysicsConfig physicsConfig = {
 
 GameState gameLoop(void) {
 	GameState state;
-
-	
 	Player player;
 
 	float timer = 0.0f;
@@ -104,7 +102,7 @@ GameState gameStart(void) {
 		}
 		BeginDrawing();
 			ClearBackground(GOLD);
-			DrawText("Josh Stinks", 200, 200, 40, WHITE);
+			DrawText("Ronnie Stinks", 200, 200, 40, WHITE);
 			DrawRectangle(200, 250, load, 30, WHITE);
 		EndDrawing();
 	}
