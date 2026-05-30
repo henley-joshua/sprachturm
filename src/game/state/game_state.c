@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include <stdio.h>
 #include "game_state.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
@@ -115,4 +116,69 @@ GameState gamePause(void) {
 	GameState state;
 
 	return state;
+}
+
+GameState gameBuilder(void) {
+	GameState state;
+
+	
+	Player player;
+
+	float timer = 0.0f;
+	collisionInit();
+	playerInit(&player);
+	physicsInit(physicsConfig);
+	staticCubesInit();
+
+	double accumulator = 0.0;
+	double previousTime = GetTime();
+
+	while (!WindowShouldClose()) {
+		double now = GetTime();
+		double deltaTime = now - previousTime;
+		previousTime = now;
+		if (deltaTime > 0.25) deltaTime = 0.25;
+		accumulator += deltaTime;
+
+		checkToggleFullscreen();
+
+		// Begin main game state
+		//inputUpdate();   // To be added
+		playerUpdate(&player, deltaTime);
+		physicsUpdate(deltaTime);
+		playerSyncCamera(&player);
+		// sceneUpdate();    // To be added
+
+		BeginDrawing();
+			ClearBackground(GRAY);
+			DrawFPS(10, 10);
+
+			BeginMode3D(player.camera);
+				drawEnvironment();
+				drawPlayer(&player);
+			EndMode3D();
+		EndDrawing();
+		// End main game state
+
+	}
+
+	staticCubesUnload();
+	CloseWindow();
+	return Game_Builder;
+
+}
+
+GameState gameRun(GameState state) {
+	switch(state) {
+		case Game_Start:
+			gameStart();
+		case Game_Menu:
+			gameMenu();
+		case Game_Loop:
+			gameLoop();
+		case Game_Pause:
+			gamePause();
+		default:
+			printf("PANIC"); // Need to add a proper error here
+		}
 }
