@@ -7,6 +7,7 @@
 #include "game/player.h"
 #include "game/heightmap.h"
 #include "game/environment.h"
+#include "engine/ui/button.h"
 
 PhysicsConfig physicsConfig = {
 	.dimensions = PHYSICS_3D,
@@ -51,7 +52,7 @@ GameState gameLoop(void) {
 		// sceneUpdate();    // To be added
 
 		BeginDrawing();
-			ClearBackground(BLACK);
+			ClearBackground(GRAY);
 			DrawFPS(10, 10);
 
 			BeginMode3D(player.camera);
@@ -74,19 +75,39 @@ GameState gameLoop(void) {
 GameState gameMenu(void) {
 	GameState state;
 	bool isButton = false;
-	Rectangle button = {190, 250, 300, 100};
+	Rectangle buttonDim = {40, 40, 300, 100};
+	Vector2 pos = {40, 40}; 		// Part of fun
+	Vector2 vel = {3, 2}; 		// Part of fun
+
 	while(!WindowShouldClose() && !isButton) {
 		BeginDrawing();
 			ClearBackground(BLACK);
-			DrawRectangle(button.x, button.y, button.width, button.height, WHITE);
-			DrawText("Press Start", 200, 300, 40, GOLD);
-		EndDrawing();
-		Vector2 mouse = GetMousePosition();
-		if(CheckCollisionPointRec(GetMousePosition(), button) && 
-		   IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
-			isButton = true;
-		}
-	}
+//============================================================================
+// Purely for fun
+			
+
+
+
+
+			if(pos.x <= 0 || pos.x >= GetScreenWidth() - buttonDim.width){
+				vel.x *= -1;
+			}
+			if(pos.y <= 0 || pos.y >= GetScreenHeight() - buttonDim.height){
+				vel.y *= -1;
+			}
+
+			pos.x += vel.x;
+			pos.y += vel.y;
+			
+			
+			isButton = makeButton(buttonDim, WHITE, GOLD, "Josh Sucks", 30);
+			
+			buttonDim = (Rectangle){pos.x, pos.y, 300, 100};
+//============================================================================
+
+			
+
+		EndDrawing();	}
 	return Game_Loop;
 } 
 
