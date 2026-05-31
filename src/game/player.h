@@ -14,9 +14,13 @@ typedef struct {
 	float pitch;
 } Player;
 
-Vector3 getFreeCamMovement(void);
+typedef enum {
+	FREE_CAM_MODE,
+	PLAYER_MODE
+} GamemodeState;
+
 void playerInit(Player *player);
-void playerUpdate(Player *player, float deltaTime);
+GamemodeState playerUpdate(Player *player, float deltaTime);
 void rotatePlayerBody(Player *player, Vector3 distance);
 void drawPlayer(Player *player);
 void playerSyncCamera(Player *player);

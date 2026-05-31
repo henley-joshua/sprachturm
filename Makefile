@@ -94,7 +94,7 @@ clean-releases:
 	rm -rf build/release/
 
 run: all
-	./$(TARGET)
+	./$(TARGET) $(ARGS)
 
 debug: BUILD=debug
 debug: all

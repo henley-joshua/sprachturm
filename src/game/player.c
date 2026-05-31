@@ -23,21 +23,6 @@ Vector3 PLAYER_INIT_SIZE = { 2.0f, 3.0f, 1.5f };
 Color PLAYER_INIT_COLOR = LIGHTGRAY;
 
 
-Vector3 getFreeCamMovement(void) {
-	Vector3 cameraMovement;
-	Movement movementsMap;
-
-	movementsMap.left = IsKeyDown(KEY_A);
-	movementsMap.right = IsKeyDown(KEY_D);
-	movementsMap.forward = IsKeyDown(KEY_W);
-	movementsMap.backward = IsKeyDown(KEY_S);
-	movementsMap.up = IsKeyDown(KEY_SPACE);
-	movementsMap.down = IsKeyDown(KEY_LEFT_CONTROL);
-
-	cameraMovement = getMovementVector(movementsMap);
-	return cameraMovement;
-}
-
 void playerSyncCamera(Player *player) {
 	Vector2 mouseDelta = GetMouseDelta();
 
@@ -129,13 +114,23 @@ Vector3 getPlayerMovement(Movement playerInput, Player *player) {
 	return getPlayerMovementVector(playerInput, forward, right);
 }
 
-void playerUpdate(Player *player, float deltaTime) {
+static void triggerFreeCamMode(Player *player) {
+	physicsUnregister(&player->base.body);
+}
+
+GamemodeState playerUpdate(Player *player, float deltaTime) {
+	if (IsKeyPressed(KEY_F1)) {
+		triggerFreeCamMode(player);
+		return FREE_CAM_MODE;
+	}
+	
 	Movement playerInput = getPlayerInput();
 	Vector3 playerMovement = getPlayerMovement(playerInput, player);
 
 	player->base.body.velocity.x = playerMovement.x * player->speed;
 	player->base.body.velocity.z = playerMovement.z * player->speed;
 	if (playerInput.up && player->base.body.isGrounded) physicsApplyImpulse(&player->base.body, (Vector3){ 0, JUMP_FORCE, 0 });
+	return PLAYER_MODE;
 }
 
 void rotatePlayerBody(Player *player, Vector3 distance) {
