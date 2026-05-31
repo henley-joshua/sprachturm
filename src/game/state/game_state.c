@@ -8,6 +8,7 @@
 #include "game/player.h"
 #include "game/heightmap.h"
 #include "game/environment.h"
+#include "game/free_cam.h"
 #include "engine/ui/button.h"
 
 PhysicsConfig physicsConfig = {
@@ -24,6 +25,7 @@ PhysicsConfig physicsConfig = {
 GameState gameLoop(void) {
 	GameState state;
 	Player player;
+	GamemodeState gameMode = PLAYER_MODE;
 
 	float timer = 0.0f;
 	collisionInit();
@@ -47,9 +49,14 @@ GameState gameLoop(void) {
 		// Begin main game state
 		//inputUpdate();   // To be added
 		updateEnvironment();
-		playerUpdate(&player, deltaTime);
+		if (gameMode == PLAYER_MODE) {
+			gameMode = playerUpdate(&player, deltaTime);
+		}
+		else if (gameMode == FREE_CAM_MODE) {
+			gameMode = freeCamUpdate(&player, deltaTime);
+		}
 		physicsUpdate(deltaTime);
-		playerSyncCamera(&player);
+		if (gameMode == PLAYER_MODE) playerSyncCamera(&player);
 		// sceneUpdate();    // To be added
 
 		BeginDrawing();
@@ -58,7 +65,9 @@ GameState gameLoop(void) {
 
 			BeginMode3D(player.camera);
 				drawEnvironment();
-				drawPlayer(&player);
+				if (gameMode == PLAYER_MODE) {
+					drawPlayer(&player);
+				}
 			EndMode3D();
 		EndDrawing();
 		// End main game state
