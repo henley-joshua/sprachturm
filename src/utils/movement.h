@@ -13,7 +13,5 @@ typedef struct {
 } Movement;
 
 Vector3 getMovementVector(Movement movement);
-Vector3 getPlayerMovementVector(Movement movement, Vector3 forward, Vector3 right);
-Movement getPlayerInput();
 
 #endif
