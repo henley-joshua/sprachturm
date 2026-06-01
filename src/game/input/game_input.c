@@ -9,6 +9,7 @@ void gameInputInit(void) {
 	inputBind(ACTION_MOVE_BACKWARD, KEY_S);
 	inputBind(ACTION_MOVE_LEFT, KEY_A);
 	inputBind(ACTION_MOVE_RIGHT, KEY_D);
+	inputBind(ACTION_CROUCH, KEY_LEFT_CONTROL);
 	inputBind(ACTION_JUMP, KEY_SPACE);
 	inputBind(ACTION_SPRINT, KEY_LEFT_SHIFT);
 	inputBind(ACTION_FREE_CAM, KEY_F1);
