@@ -1,38 +1,25 @@
-#include "raylib.h"
 #include <stdio.h>
+#include "raylib.h"
 #include "game_state.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
 #include "engine/rendering/renderer.h"
 #include "engine/rendering/camera.h"
+#include "game/init/game_init.h"
 #include "game/player.h"
 #include "game/heightmap.h"
 #include "game/environment.h"
 #include "game/free_cam.h"
+#include "engine/input/input.h"
 #include "engine/ui/button.h"
-
-PhysicsConfig physicsConfig = {
-	.dimensions = PHYSICS_3D,
-	.gravity = { 0.0f, -3.5f, 0.0f },
-	.enableGravity = true,
-	.airDrag = 0.01,
-	.groundFriction = 0.5f,
-	.enableFriction = false,
-	.substeps = 1,
-	.fixedTimestep = 1.0f / 60.0f
-};
 
 GameState gameLoop(void) {
 	GameState state;
 	Player player;
 	GamemodeState gameMode = PLAYER_MODE;
 
+	gameInit(&player);
 	float timer = 0.0f;
-	collisionInit();
-	playerInit(&player);
-	physicsInit(physicsConfig);
-	staticCubesInit();
-	dynamicCubesInit();
 
 	double accumulator = 0.0;
 	double previousTime = GetTime();
@@ -49,6 +36,7 @@ GameState gameLoop(void) {
 		// Begin main game state
 		//inputUpdate();   // To be added
 		updateEnvironment();
+		inputUpdate();
 		if (gameMode == PLAYER_MODE) {
 			gameMode = playerUpdate(&player, deltaTime);
 		}
@@ -151,15 +139,10 @@ GameState gamePause(void) {
 
 GameState gameBuilder(void) {
 	GameState state;
-
-	
 	Player player;
 
+	gameInit(&player);
 	float timer = 0.0f;
-	collisionInit();
-	playerInit(&player);
-	physicsInit(physicsConfig);
-	staticCubesInit();
 
 	double accumulator = 0.0;
 	double previousTime = GetTime();
@@ -175,6 +158,7 @@ GameState gameBuilder(void) {
 
 		// Begin main game state
 		//inputUpdate();   // To be added
+		inputUpdate();
 		playerUpdate(&player, deltaTime);
 		physicsUpdate(deltaTime);
 		playerSyncCamera(&player);

@@ -26,6 +26,7 @@ void inputInit(int count) {
 void inputUpdate(void) {
 	if (!initialized) return;
 
+
 	// TODO: add gamepad integration
 	for (int count = 0; count < maxActions; count++) {
 		bool keyHeld = bindings[count].key != KEY_NULL && IsKeyDown(bindings[count].key);

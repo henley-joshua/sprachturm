@@ -8,6 +8,7 @@ typedef enum {
 	ACTION_MOVE_RIGHT,
 	ACTION_JUMP,
 	ACTION_SPRINT,
+	ACTION_FREE_CAM,
 	ACTION_COUNT
 } GameAction;
 

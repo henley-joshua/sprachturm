@@ -1,12 +1,13 @@
 #include <math.h>
 #include "raylib.h"
 #include "rcamera.h"
-#include "utils/movement.h"
 #include "utils/vector.h"
 #include "engine/rendering/camera.h"
 #include "game/player.h"
 #include "engine/physics/collision.h"
 #include "engine/physics/physics.h"
+#include "engine/input/input.h"
+#include "game/input/game_actions.h"
 
 float JUMP_FORCE = 20.0;
 float PLAYER_MASS = 20000.0;
@@ -24,7 +25,7 @@ Color PLAYER_INIT_COLOR = LIGHTGRAY;
 
 
 void playerSyncCamera(Player *player) {
-	Vector2 mouseDelta = GetMouseDelta();
+	Vector2 mouseDelta = inputGetMouseDelta();
 
 	player->yaw -= mouseDelta.x * player->sensitivity;
 	player->pitch += mouseDelta.y * player->sensitivity;
@@ -106,12 +107,52 @@ static Vector3 playerGetRight(Player *player) {
 	return right;
 }
 
-Vector3 getPlayerMovement(Movement playerInput, Player *player) {
+// TODO: generalize movement in the engine
+static Vector3 getPlayerMovementVector(Vector3 forward, Vector3 right, float speed) {
+	Vector3 movementVector = { 0 };
+
+	float forwardX = forward.x;
+	float forwardZ = forward.z;
+	float rightX = right.x;
+	float rightZ = right.z;
+
+	if (inputHeld(ACTION_MOVE_FORWARD)) {
+		movementVector.x += forwardX;
+		movementVector.z += forwardZ;
+	}
+	if (inputHeld(ACTION_MOVE_BACKWARD)) {
+		movementVector.x -= forwardX;
+		movementVector.z -= forwardZ;
+	}
+	if (inputHeld(ACTION_MOVE_LEFT)) {
+		movementVector.x -= rightX;
+		movementVector.z -= rightZ;
+	}
+	if (inputHeld(ACTION_MOVE_RIGHT)) {
+		movementVector.x += rightX;
+		movementVector.z += rightZ;
+	}
+
+	float moveLength = sqrtf(movementVector.x * movementVector.x + movementVector.z * movementVector.z);
+	if (moveLength > 0) {
+		movementVector.x /= moveLength;
+		movementVector.z /= moveLength;
+	}
+
+	if (inputHeld(ACTION_SPRINT)) {
+		speed *= 2.0f;
+	}
+	movementVector.x *= speed;
+	movementVector.z *= speed;
+
+	return movementVector;
+}
+
+Vector3 getPlayerMovement(Player *player) {
 	Vector3 forward = playerGetForward(player);
 	Vector3 right = playerGetRight(player);
 
-	//physicsIntegrate(&player->base.body, deltaTime);
-	return getPlayerMovementVector(playerInput, forward, right);
+	return getPlayerMovementVector(forward, right, player->speed);
 }
 
 static void triggerFreeCamMode(Player *player) {
@@ -119,17 +160,15 @@ static void triggerFreeCamMode(Player *player) {
 }
 
 GamemodeState playerUpdate(Player *player, float deltaTime) {
-	if (IsKeyPressed(KEY_F1)) {
+	if (inputPressed(ACTION_FREE_CAM)) {
 		triggerFreeCamMode(player);
 		return FREE_CAM_MODE;
 	}
-	
-	Movement playerInput = getPlayerInput();
-	Vector3 playerMovement = getPlayerMovement(playerInput, player);
+	Vector3 playerMovement = getPlayerMovement(player);
 
-	player->base.body.velocity.x = playerMovement.x * player->speed;
-	player->base.body.velocity.z = playerMovement.z * player->speed;
-	if (playerInput.up && player->base.body.isGrounded) physicsApplyImpulse(&player->base.body, (Vector3){ 0, JUMP_FORCE, 0 });
+	player->base.body.velocity.x = playerMovement.x;
+	player->base.body.velocity.z = playerMovement.z;
+	if (inputPressed(ACTION_JUMP) && player->base.body.isGrounded) physicsApplyImpulse(&player->base.body, (Vector3){ 0, JUMP_FORCE, 0 });
 	return PLAYER_MODE;
 }
 
