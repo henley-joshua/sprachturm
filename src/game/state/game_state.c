@@ -12,6 +12,7 @@
 #include "game/free_cam.h"
 #include "engine/input/input.h"
 #include "engine/ui/button.h"
+#include "engine/builder/builder.h"
 
 GameState gameLoop(void) {
 	GameState state;
@@ -140,6 +141,7 @@ GameState gamePause(void) {
 GameState gameBuilder(void) {
 	GameState state;
 	Player player;
+  Asset asset = builderInit("/home/usr/sprachturm/assets/textures/test.glb");
 
 	gameInit(&player);
 	float timer = 0.0f;
@@ -170,6 +172,8 @@ GameState gameBuilder(void) {
 
 			BeginMode3D(player.camera);
 				drawEnvironment();
+        
+        runBuilder(&asset);
 				drawPlayer(&player);
 			EndMode3D();
 		EndDrawing();
@@ -177,7 +181,8 @@ GameState gameBuilder(void) {
 
 	}
 
-	staticCubesUnload();
+	//staticCubesUnload();
+  
 	CloseWindow();
 	return Game_Builder;
 
