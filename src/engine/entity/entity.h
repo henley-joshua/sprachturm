@@ -1,6 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include <stdint.h>
 #include "raylib.h"
 #include "engine/physics/physics.h"
 

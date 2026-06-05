@@ -1,14 +1,15 @@
+#include <stdint.h>
+#include <string.h>
 #include "raylib.h"
+#include "engine/entity/entity.h"
 
 
 #define MAX_ENTITIES 1024
 
-typedef struct {
-	Entity slots[MAX_ENTITIES];
-	bool active[MAX_ENTITIES];
-	int count;
-	uint32_t nextId;
-} EntityPool;
+static Entity entityPool[MAX_ENTITIES];
+static bool entityActive[MAX_ENTITIES];
+static int entityCount = 0;
+static uint32_t nextEntityId = 1;
 
 
 void entitySystemInit(int maxEntites) {
@@ -44,7 +45,7 @@ Entity *entityCreate(void) {
 			entityPool[count].active = true;
 			entityPool[count].model.visible = true;
 			entityCount++;
-			return &entityPool[i];
+			return &entityPool[count];
 		}
 	}
 	TraceLog(LOG_WARNING, "<Entity> Pool full - cannot create entity");
