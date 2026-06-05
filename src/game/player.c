@@ -79,7 +79,7 @@ void playerInit(Player *player) {
 	player->yaw = PLAYER_INIT_YAW;
 	player->base.body = playerPhysics;
 	player->base.model.size = PLAYER_INIT_SIZE;
-	player->base.model.color = PLAYER_INIT_COLOR;
+	player->base.model.tint = PLAYER_INIT_COLOR;
 
 	playerSyncCamera(player);
 	physicsRegister(&player->base.body);
@@ -179,7 +179,7 @@ void rotatePlayerBody(Player *player, Vector3 distance) {
 void drawPlayer(Player *player) {
 	Vector3 initPosLower = { player->base.body.position.x, player->base.body.position.y - player->height, player->base.body.position.z };
 	Vector3 initPosUpper = { player->base.body.position.x, player->base.body.position.y + player->height, player->base.body.position.z };
-	DrawCapsule(initPosLower, initPosUpper, player->base.body.colliderExtents.x, 10, 10, player->base.model.color);
+	DrawCapsule(initPosLower, initPosUpper, player->base.body.colliderExtents.x, 10, 10, player->base.model.tint);
 	//DrawCubeV(player->base.body.position, player->base.model.size, player->base.model.color);
 }
 
