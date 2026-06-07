@@ -21,7 +21,7 @@ static Vector3 getFreeCamMovement(void) {
 }
 
 static void triggerPlayerMode(Player *player) {
-	physicsRegister(&player->base.body);
+	physicsRegister(&player->base->body);
 }
 
 GamemodeState freeCamUpdate(Player *player, float deltaTime) {
