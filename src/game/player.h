@@ -6,7 +6,7 @@
 
 typedef struct {
 	Camera3D camera;
-	Entity base;
+	Entity *base;
 	float height;
 	float speed;
 	float sensitivity;

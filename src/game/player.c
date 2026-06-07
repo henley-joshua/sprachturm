@@ -34,9 +34,9 @@ void playerSyncCamera(Player *player) {
 	if (player->pitch < -1.5f) player->pitch = -1.5f;
 
 	Vector3 cameraPosition = {
-		player->base.body.position.x,
-		player->base.body.position.y + player->height,
-		player->base.body.position.z
+		player->base->body.position.x,
+		player->base->body.position.y + player->height,
+		player->base->body.position.z
 	};
 	player->camera.position = cameraPosition;
 
@@ -56,19 +56,22 @@ void playerInit(Player *player) {
 		.maxVelocityDown = 100.0f
 	};
 
-	PhysicsBody playerPhysics = {
-		.position = PLAYER_INIT_POSITION,
-		.velocity = PLAYER_INIT_VELOCITY,
-		.acceleration = PLAYER_INIT_ACCELERATION,
-		.bodyType = BODY_DYNAMIC,
-		.mass = PLAYER_MASS,
-		.bounciness = 0.0f,
-		.gravityScale = 10.0f,
-		.colliderType = COLLIDER_AABB,
-		.colliderExtents = { 0.5f, 1.0f, 0.5f },
-		.isActive = true,
-		.velocityLimits = playerVelocityLimits
-	};
+	player->base = entityCreate();
+
+	entitySetBodyType(player->base, BODY_DYNAMIC);
+	entitySetColliderType(player->base, COLLIDER_AABB);
+	entitySetPosition(player->base, PLAYER_INIT_POSITION);
+	entitySetVelocity(player->base, PLAYER_INIT_VELOCITY);
+	entitySetAcceleration(player->base, PLAYER_INIT_ACCELERATION);
+	entitySetMass(player->base, PLAYER_MASS);
+	entitySetBounciness(player->base, 0.0f);
+	entitySetGravityScale(player->base, 10.0f);
+	entitySetColliderExtents(player->base, (Vector3){ 0.5f, 1.0f, 0.5f });
+	entitySetVelocityLimits(player->base, playerVelocityLimits);
+	entitySetIsActive(player->base, true);
+
+	player->base->model.size = PLAYER_INIT_SIZE;
+	player->base->model.tint = PLAYER_INIT_COLOR;
 
 	playerCamera = playerCameraInit(PLAYER_INIT_POSITION, PLAYER_INIT_TARGET, PLAYER_INIT_UP);
 	player->camera = playerCamera;
@@ -77,12 +80,9 @@ void playerInit(Player *player) {
 	player->sensitivity = PLAYER_INIT_SENSITIVITY;
 	player->pitch = PLAYER_INIT_PITCH;
 	player->yaw = PLAYER_INIT_YAW;
-	player->base.body = playerPhysics;
-	player->base.model.size = PLAYER_INIT_SIZE;
-	player->base.model.tint = PLAYER_INIT_COLOR;
 
 	playerSyncCamera(player);
-	physicsRegister(&player->base.body);
+	physicsRegister(&player->base->body);
 }
 
 static Vector3 playerGetForward(Player *player) {
@@ -156,7 +156,7 @@ Vector3 getPlayerMovement(Player *player) {
 }
 
 static void triggerFreeCamMode(Player *player) {
-	physicsUnregister(&player->base.body);
+	physicsUnregister(&player->base->body);
 }
 
 GamemodeState playerUpdate(Player *player, float deltaTime) {
@@ -166,9 +166,9 @@ GamemodeState playerUpdate(Player *player, float deltaTime) {
 	}
 	Vector3 playerMovement = getPlayerMovement(player);
 
-	player->base.body.velocity.x = playerMovement.x;
-	player->base.body.velocity.z = playerMovement.z;
-	if (inputPressed(ACTION_JUMP) && player->base.body.isGrounded) physicsApplyImpulse(&player->base.body, (Vector3){ 0, JUMP_FORCE, 0 });
+	player->base->body.velocity.x = playerMovement.x;
+	player->base->body.velocity.z = playerMovement.z;
+	if (inputPressed(ACTION_JUMP) && player->base->body.isGrounded) physicsApplyImpulse(&player->base->body, (Vector3){ 0, JUMP_FORCE, 0 });
 	return PLAYER_MODE;
 }
 
@@ -177,9 +177,9 @@ void rotatePlayerBody(Player *player, Vector3 distance) {
 }
 
 void drawPlayer(Player *player) {
-	Vector3 initPosLower = { player->base.body.position.x, player->base.body.position.y - player->height, player->base.body.position.z };
-	Vector3 initPosUpper = { player->base.body.position.x, player->base.body.position.y + player->height, player->base.body.position.z };
-	DrawCapsule(initPosLower, initPosUpper, player->base.body.colliderExtents.x, 10, 10, player->base.model.tint);
-	//DrawCubeV(player->base.body.position, player->base.model.size, player->base.model.color);
+	Vector3 initPosLower = { player->base->body.position.x, player->base->body.position.y - player->height, player->base->body.position.z };
+	Vector3 initPosUpper = { player->base->body.position.x, player->base->body.position.y + player->height, player->base->body.position.z };
+	DrawCapsule(initPosLower, initPosUpper, player->base->body.colliderExtents.x, 10, 10, player->base->model.tint);
+	//DrawCubeV(player->base->body.position, player->base->model.size, player->base->model.color);
 }
 
