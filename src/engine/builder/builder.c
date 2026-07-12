@@ -1,13 +1,13 @@
 #include "raylib.h"
 #include "builder.h"
-#include <stdio.h>
+#include <stdio.h> 
 #include <string.h>
 
 Asset builderInit(const char *modelLocation) {
   Asset asset;
   // Define Values will need to be updated with full list later.
   asset.position = (Vector3){ 0.0f, 2.0f, 0.0f };
-  asset.scale = 1.0f;
+  asset.scale = 2.0f;
   asset.tint = WHITE;
 
   strncpy(asset.fileLocation, modelLocation, sizeof(asset.fileLocation) - 1);

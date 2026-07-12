@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdio.h>
 #include "raylib.h"
 #include "game_state.h"
@@ -12,7 +13,7 @@
 #include "game/free_cam.h"
 #include "engine/input/input.h"
 #include "engine/ui/button.h"
-#include "engine/builder/builder.h"
+#include "engine/builder/builder.h" 
 
 GameState gameLoop(void) {
 	GameState state;
@@ -141,7 +142,15 @@ GameState gamePause(void) {
 GameState gameBuilder(void) {
 	GameState state;
 	Player player;
-  Asset asset = builderInit("/home/usr/sprachturm/assets/textures/test.glb");
+	char cwd[1024];
+	char path[1024];
+	if(getcwd(cwd, sizeof(cwd))!= NULL) {
+		printf("test : %s", cwd);
+	}
+
+	snprintf(path, sizeof(path), "%s/assets/textures/test.glb", cwd);
+
+  	Asset asset = builderInit(path);
 
 	gameInit(&player);
 	float timer = 0.0f;
