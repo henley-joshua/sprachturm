@@ -17,6 +17,10 @@ build_release() {
     echo "=== Building ${PLATFORM} release ==="
     mkdir -p "${OUT_DIR}/bin" "${OUT_DIR}/raylib"
 
+    if [ "${PLATFORM}" = "linux" ]; then
+	    ./scripts/gen-wayland-protocols.sh "${OUT_DIR}/wayland-protocols"
+    fi
+
     # Compile Raylib
     echo "Compiling Raylib..."
     for src in ${RAYLIB_SRC}/rcore.c \
@@ -65,7 +69,7 @@ build_release() {
 case "${1}" in
     linux)
         build_release "linux" "gcc" \
-            "-D_GLFW_X11 -DPLATFORM_DESKTOP" \
+            "-D_GLFW_X11 -D_GLFW_WAYLAND -DPLATFORM_DESKTOP -Ibuild/release-linux/wayland-protocols" \
             "-lm -lGL -lpthread -ldl -lrt -lX11" \
             ""
         ;;
@@ -77,7 +81,7 @@ case "${1}" in
         ;;
     all)
         build_release "linux" "gcc" \
-            "-D_GLFW_X11 -DPLATFORM_DESKTOP" \
+            "-D_GLFW_X11 -D_GLFW_WAYLAND -DPLATFORM_DESKTOP -Ibuild/release-linux/wayland-protocols" \
             "-lm -lGL -lpthread -ldl -lrt -lX11" \
             ""
         build_release "windows" "x86_64-w64-mingw32-gcc" \

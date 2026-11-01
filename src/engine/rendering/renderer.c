@@ -14,3 +14,10 @@ void checkToggleFullscreen(void) {
 	bool toggleFullscreen = IsKeyPressed(KEY_F11);
 	if (toggleFullscreen) ToggleFullscreen();
 }
+
+void updateCursorLock(void) {
+	static bool wasFocused = false;
+	bool isFocused = IsWindowFocused();
+	if (isFocused && !wasFocused) DisableCursor();
+	wasFocused = isFocused;
+}

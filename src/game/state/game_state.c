@@ -33,6 +33,7 @@ GameState gameLoop(void) {
 		accumulator += deltaTime;
 
 		checkToggleFullscreen();
+		updateCursorLock();
 
 		// Begin main game state
 		//inputUpdate();   // To be added
@@ -157,6 +158,7 @@ GameState gameBuilder(void) {
 		accumulator += deltaTime;
 
 		checkToggleFullscreen();
+		updateCursorLock();
 
 		// Begin main game state
 		//inputUpdate();   // To be added

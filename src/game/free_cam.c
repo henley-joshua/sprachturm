@@ -25,7 +25,7 @@ static void triggerPlayerMode(Player *player) {
 }
 
 GamemodeState freeCamUpdate(Player *player, float deltaTime) {
-	float sensitivity = 0.2;
+	float sensitivity = 0.00002;
 	if (inputPressed(ACTION_FREE_CAM)) {
 		triggerPlayerMode(player);
 		return PLAYER_MODE;

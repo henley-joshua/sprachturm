@@ -12,7 +12,7 @@ CC_MAC	   := clang
 UNAME      := $(shell uname)
 ifeq ($(UNAME), Linux)
 	CC             := $(CC_LINUX)
-	PLATFORM_FLAGS := -D_GLFW_X11 -DPLATFORM_DESKTOP
+	PLATFORM_FLAGS := -D_GLFW_X11 -D_GLFW_WAYLAND -DPLATFORM_DESKTOP -I$(BUILD_DIR)/wayland-protocols
 	LDFLAGS        := -lm -lGL -lpthread -ldl -lrt -lX11
 	TARGET         := $(BUILD_DIR)/bin/game
 endif
@@ -25,8 +25,8 @@ ifeq ($(OS), Windows_NT)
 endif
 
 ifeq ($(UNAME), Darwin)
-	CC			   := $(CC_MAC)
-	PLATFORM_FLAGS := -DPLATFORM_DESKTOP -D_GLFW_COCOA
+	CC		   := $(CC_MAC)
+	PLATFORM_FLAGS     := -DPLATFORM_DESKTOP -D_GLFW_COCOA
 	EXTRA_FLAGS	   := -x objective-c
 	LDFLAGS		   := -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
 	TARGET 		   := $(BUILD_DIR)/bin/game
@@ -76,7 +76,11 @@ $(TARGET): $(OBJS) $(RAYLIB_LIB)
 	@mkdir -p $(dir $@)
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/raylib/%.o: $(RAYLIB_SRC)/%.c
+$(BUILD_DIR)/wayland-protocols/.stamp:
+	./scripts/gen-wayland-protocols.sh $(BUILD_DIR)/wayland-protocols
+	@touch $@
+
+$(BUILD_DIR)/raylib/%.o: $(RAYLIB_SRC)/%.c | $(BUILD_DIR)/wayland-protocols/.stamp
 	@mkdir -p $(dir $@)
 	$(CC) -std=c11 $(EXTRA_FLAGS) -I$(RAYLIB_SRC) -I$(RAYLIB_SRC)/external/glfw/include $(PLATFORM_FLAGS) -w -c $< -o $@
 
