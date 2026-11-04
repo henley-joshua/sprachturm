@@ -1,0 +1,45 @@
+[2026-05-27 19:17:07][EVENT]: hamburger
+[2026-05-27 19:17:07][INFO] : Initializing raylib 6.1-dev
+[2026-05-27 19:17:07][INFO] : Platform backend: DESKTOP (GLFW)
+[2026-05-27 19:17:07][INFO] : Supported raylib modules:
+[2026-05-27 19:17:07][INFO] :     > rcore:..... loaded (mandatory)
+[2026-05-27 19:17:07][INFO] :     > rlgl:...... loaded (mandatory)
+[2026-05-27 19:17:07][INFO] :     > rshapes:... loaded (optional)
+[2026-05-27 19:17:07][INFO] :     > rtextures:. loaded (optional)
+[2026-05-27 19:17:07][INFO] :     > rtext:..... loaded (optional)
+[2026-05-27 19:17:07][INFO] :     > rmodels:... loaded (optional)
+[2026-05-27 19:17:07][INFO] :     > raudio:.... loaded (optional)
+[2026-05-27 19:17:07][INFO] : DISPLAY: Device initialized successfully 
+[2026-05-27 19:17:07][INFO] :     > Display size: 1920 x 1080
+[2026-05-27 19:17:07][INFO] :     > Screen size:  800 x 600
+[2026-05-27 19:17:07][INFO] :     > Render size:  800 x 600
+[2026-05-27 19:17:07][INFO] :     > Viewport offsets: 0, 0
+[2026-05-27 19:17:07][INFO] : GLAD: OpenGL extensions loaded successfully
+[2026-05-27 19:17:07][INFO] : GL: Supported extensions count: 232
+[2026-05-27 19:17:07][INFO] : GL: OpenGL device information:
+[2026-05-27 19:17:07][INFO] :     > Vendor:   Mesa
+[2026-05-27 19:17:07][INFO] :     > Renderer: llvmpipe (LLVM 21.1.8, 256 bits)
+[2026-05-27 19:17:07][INFO] :     > Version:  4.5 (Core Profile) Mesa 26.0.3-1ubuntu1
+[2026-05-27 19:17:07][INFO] :     > GLSL:     4.50
+[2026-05-27 19:17:07][INFO] : GL: VAO extension detected, VAO functions loaded successfully
+[2026-05-27 19:17:07][INFO] : GL: NPOT textures extension detected, full NPOT textures supported
+[2026-05-27 19:17:07][INFO] : GL: DXT compressed textures supported
+[2026-05-27 19:17:07][INFO] : GL: ETC2/EAC compressed textures supported
+[2026-05-27 19:17:07][INFO] : PLATFORM: DESKTOP (GLFW - X11): Initialized successfully
+[2026-05-27 19:17:07][INFO] : TEXTURE: [ID 1] Texture loaded successfully (1x1 | R8G8B8A8 | 1 mipmaps)
+[2026-05-27 19:17:07][INFO] : TEXTURE: [ID 1] Default texture loaded successfully
+[2026-05-27 19:17:07][INFO] : SHADER: [ID 1] Vertex shader compiled successfully
+[2026-05-27 19:17:07][INFO] : SHADER: [ID 2] Fragment shader compiled successfully
+[2026-05-27 19:17:07][INFO] : SHADER: [ID 3] Program shader loaded successfully
+[2026-05-27 19:17:07][INFO] : SHADER: [ID 3] Default shader loaded successfully
+[2026-05-27 19:17:07][INFO] : RLGL: Render batch vertex buffers loaded successfully in RAM (CPU)
+[2026-05-27 19:17:07][INFO] : RLGL: Render batch vertex buffers loaded successfully in VRAM (GPU)
+[2026-05-27 19:17:07][INFO] : RLGL: Default OpenGL state initialized successfully
+[2026-05-27 19:17:07][INFO] : TEXTURE: [ID 2] Texture loaded successfully (128x128 | GRAY_ALPHA | 1 mipmaps)
+[2026-05-27 19:17:07][INFO] : FONT: Default font loaded successfully (224 glyphs)
+[2026-05-27 19:17:07][INFO] : SYSTEM: Working Directory: /mnt/c/Users/lazyd/Projects/gameproject/sprachturm
+[2026-05-27 19:17:07][INFO] : TIMER: Target time per frame: 16.667 milliseconds
+[2026-05-27 19:17:10][INFO] : TEXTURE: [ID 2] Unloaded texture data from VRAM (GPU)
+[2026-05-27 19:17:10][INFO] : SHADER: [ID 3] Default shader unloaded successfully
+[2026-05-27 19:17:10][INFO] : TEXTURE: [ID 1] Default texture unloaded successfully
+[2026-05-27 19:17:10][INFO] : Window closed successfully
